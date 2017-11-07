@@ -17,6 +17,8 @@ def leArquivoJson():
     return dataTreino, dataTeste
 
 def criarTodosOsIngrediente(dataTreino, dataTeste):
+
+    # Acrescenta os ingredientes do conjunto de treino em ingredientes
     ingredientes = []
     for j in dataTreino:
         ingredientes.append(j['ingredients'])
@@ -24,7 +26,8 @@ def criarTodosOsIngrediente(dataTreino, dataTeste):
     for i in range(0, len(ingredientes)):
         for j in range(0, len(ingredientes[i])):
             todosOsIngredientesTreino.append((ingredientes[i][j]))
-    # print(len(ingredi))
+
+    # Acrescenta os ingredientes do conjunto de teste em ingredientes
     ingredientes = []
     for j in dataTeste:
         ingredientes.append(j['ingredients'])
