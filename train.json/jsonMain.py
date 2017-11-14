@@ -78,7 +78,6 @@ def retornaTeste(todosOsIngredientesTreino, dicionarioDeJsonTEste):
                 if ingrediente == todosOsIngredientesTreino[j]:
                     xTeste[j] = 1
 
-
 def main():
     dicionarioDeJsonTrieno, dicionarioDeJsonTEste = leArquivoJson()
 
