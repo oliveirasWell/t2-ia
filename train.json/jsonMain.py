@@ -16,7 +16,7 @@ def leArquivoJson():
 
     return dataTreino, dataTeste
 
-def criarTodosOsIngrediente(dataTreino, dataTeste):
+def criarTodosOsIngrediente(dataTreino):
 
     # Acrescenta os ingredientes do conjunto de treino em ingredientes
     ingredientes = []
@@ -27,19 +27,9 @@ def criarTodosOsIngrediente(dataTreino, dataTeste):
         for j in range(0, len(ingredientes[i])):
             todosOsIngredientesTreino.append((ingredientes[i][j]))
 
-    # Acrescenta os ingredientes do conjunto de teste em ingredientes
-    ingredientes = []
-    for j in dataTeste:
-        ingredientes.append(j['ingredients'])
-    todosOsIngredientesTeste = []
-    for i in range(0, len(ingredientes)):
-        for j in range(0, len(ingredientes[i])):
-            todosOsIngredientesTeste.append((ingredientes[i][j]))
 
     todosOsIngredientesTreino = set(todosOsIngredientesTreino)
-    todosOsIngredientesTeste = set(todosOsIngredientesTeste)
 
-    #print(len(todosOsIngredientes))
     return todosOsIngredientesTreino
 
 def criarXSYIDS(dicionarioDeJson, todosOsIngredientes):
@@ -55,8 +45,9 @@ def criarXSYIDS(dicionarioDeJson, todosOsIngredientes):
                 cont = cont + 1;
         quant.append(cont)
 
-    quant, todosOsIngredientes = zip(*sorted(zip(quant, todosOsIngredientes)))
-
+    #quant, todosOsIngredientes = zip(*sorted(zip(quant, todosOsIngredientes)))
+    #print(quant)
+    #print(todosOsIngredientes)
     ingredientesMaioresQue100 = []
     quantIngredientesMaioresQue100 = []
 
@@ -77,20 +68,36 @@ def criarXSYIDS(dicionarioDeJson, todosOsIngredientes):
         y.append(i['cuisine'])
     return xs, y, id
 
+def retornaTeste(todosOsIngredientesTreino, dicionarioDeJsonTEste):
+    for i in (dicionarioDeJsonTEste):
+        xTeste = []
+        for j in range(0, len(todosOsIngredientesTreino)):
+            xTeste.append(0)
+        for ingrediente in range (i['igredients']):
+            for j in range(0, len(todosOsIngredientesTreino)):
+                if ingrediente == todosOsIngredientesTreino[j]:
+                    xTeste[j] = 1
+
+
 def main():
     dicionarioDeJsonTrieno, dicionarioDeJsonTEste = leArquivoJson()
-    #print(dicionarioDeJson[0])
-    todosOsIngredientes = criarTodosOsIngrediente(dicionarioDeJsonTrieno, dicionarioDeJsonTEste)
+
+    todosOsIngredientesTreino = criarTodosOsIngrediente(dicionarioDeJsonTrieno)
 
     #print(len(todosOsIngredientes))
-    xs, y, id = criarXSYIDS(dicionarioDeJsonTrieno, todosOsIngredientes)
+    xsTreino, yTreino, id = criarXSYIDS(dicionarioDeJsonTrieno, todosOsIngredientesTreino)
+
+    #xsTeste, yTeste, idTeste = criarXSYIDS(dicionarioDeJsonTEste, todosOsIngredientesTeste)
+
     #print(id[0])
     #print(xs[0])
     #print(y[0])
-    X_train, X_test, y_train, y_test = train_test_split(xs, y, test_size=0.3, random_state=0)
+    #X_train, X_test, y_train, y_test = train_test_split(xs, y, test_size=0.3, random_state=0)
     clf = neighbors.KNeighborsClassifier(15, weights='uniform')
-    clf.fit(xs, y)
-    maiorScore = clf.score(X_test, y_test)
+    clf.fit(xsTreino, yTreino)
+    maiorScore = clf.predict(X_test)
+    print(maiorScore)
+    #result_dict = dict(zip(id, maiorScore))
     print("Melhores resultados: Weight: uniform, k = 15, Score: %f" % (maiorScore))
     return
 

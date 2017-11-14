@@ -2,6 +2,7 @@ import json
 import theano
 import numpy as np
 from numpy import random
+from itertools import izip
 from pandas import DataFrame
 from theano import tensor as T
 from collections import OrderedDict
@@ -23,10 +24,10 @@ def get_nesterov_momentum_updates(loss_expr,
     sparse_grads = grads[-len(sparse_parameters):]
     updates = []
 
-    for p, g in zip(sparse_parameters, sparse_grads):
+    for p, g in izip(sparse_parameters, sparse_grads):
         updates.append((p, p - learning_rate * g))
 
-    for p, g in zip(dense_parameters, dense_grads):
+    for p, g in izip(dense_parameters, dense_grads):
         v = shared_zeros_like(p)
         new_v = momentum * v - learning_rate * g
         new_p = p + momentum * new_v - learning_rate * g
@@ -174,18 +175,18 @@ train_data = train_data[int(n * 0.1):]
 
 
 for i in xrange(18):
-    print( 'epoch', i)
+    print 'epoch', i
     losses = []
     rng.shuffle(train_data)
     for i, (ingredients, cuisine) in enumerate(train_data):
         loss = train_model(ingredients, [cuisine])
         losses.append(loss)
         if i != 0 and i % 10000 == 0:
-            print ('train', np.mean(losses))
+            print 'train', np.mean(losses)
             losses = []
             for ingredients, cuisine in val_data_val:
                 losses.append(get_cost(ingredients, [cuisine]))
-            print ('val', np.mean(losses))
+            print 'val', np.mean(losses)
             losses = []
 
 
@@ -196,7 +197,7 @@ for ingredients, cuisine in val_data_val:
     prob_dist = predict(ingredients)
     idx = np.argmax(prob_dist)
     acc.append(idx == cuisine)
-print( np.mean(losses), np.mean(acc))
+print np.mean(losses), np.mean(acc)
 
 test_Y = []
 for each in test_X:

@@ -18,6 +18,7 @@ unique_cuisines = set(classes)
 
 big_data_matrix = scipy.sparse.dok_matrix((len(ingredients), len(unique_ingredients)), dtype=np.dtype(bool))
 
+
 for d,dish in enumerate(ingredients):
     for i,ingredient in enumerate(unique_ingredients):
         if ingredient in dish:
@@ -40,7 +41,7 @@ for d,dish in enumerate(ingredients_test):
     for i,ingredient in enumerate(unique_ingredients):
         if ingredient in dish:
             big_test_matrix[d,i] = True
-
+print(big_test_matrix)
 result_test = clf2.predict(big_test_matrix)
 ids = [item['id'] for item in test_data]
 result_dict = dict(zip(ids, result_test))
