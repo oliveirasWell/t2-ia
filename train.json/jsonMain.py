@@ -78,7 +78,7 @@ def criarXSYIDS(dicionarioDeJson, todosOsIngredientes):
                 xIngredientes.append(0)
         xs.append(xIngredientes)
         y.append(i['cuisine'])
-    return xs, y, id
+    return xs, y, id, ingredientesMaioresQue100
 
 
 def retornaTeste(todosOsIngredientesTreino, dicionarioDeJsonTEste, todosOsIngredientesTeste):
@@ -105,10 +105,11 @@ def main():
     todosOsIngredientesTreino, todosOsIngredientesTeste = criarTodosOsIngrediente(dicionarioDeJsonTrieno, dicionarioDeJsonTEste)
     #print(todosOsIngredientesTeste)
 
-    xsTreino, yTreino, idTreino = criarXSYIDS(dicionarioDeJsonTrieno, todosOsIngredientesTreino)
-    xsTeste, idsTeste = retornaTeste(todosOsIngredientesTreino, dicionarioDeJsonTEste, todosOsIngredientesTeste)
+    xsTreino, yTreino, idTreino, ingredientesMaioresQue100 = criarXSYIDS(dicionarioDeJsonTrieno, todosOsIngredientesTreino)
+    xsTeste, idsTeste = retornaTeste(ingredientesMaioresQue100, dicionarioDeJsonTEste, todosOsIngredientesTeste)
     # xsTeste, yTeste, idTeste = criarXSYIDS(dicionarioDeJsonTEste, todosOsIngredientesTeste)
-    print(xsTeste[0])
+    print(len(xsTreino[0]))
+    print(len(xsTeste[0]))
     # print(id[0])
     # print(xs[0])
     # print(y[0])
