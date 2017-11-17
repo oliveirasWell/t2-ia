@@ -67,7 +67,7 @@ def criarXSYIDS(dicionarioDeJson, todosOsIngredientes):
     quantIngredientesMaioresQue100 = []
 
     for i in range(0, len(todosOsIngredientes)):
-        if quant[i] >= 100:
+        if quant[i] >= 20:
             ingredientesMaioresQue100.append(todosOsIngredientes[i])
             quantIngredientesMaioresQue100.append(quant[i])
 

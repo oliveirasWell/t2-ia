@@ -49,7 +49,7 @@ result_test = clf2.predict(big_test_matrix)
 ids = [item['id'] for item in test_data]
 result_dict = dict(zip(ids, result_test))
 
-writer = csv.writer(open('submission.csv', 'wt'))
+writer = csv.writer(open('submission2.csv', 'wt'))
 writer.writerow(['id','cuisine'])
 for key, value in result_dict.items():
    writer.writerow([key, value])
