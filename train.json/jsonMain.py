@@ -86,9 +86,9 @@ def criarXSYIDS(dicionarioDeJson, todosOsIngredientes):
 
 def retornaTeste(todosOsIngredientesTreino, dicionarioDeJsonTEste, todosOsIngredientesTeste):
     xsTeste = []
+    ids = []
     for i in (dicionarioDeJsonTEste):
         xTeste = []
-        ids = []
         for j in range(0, len(todosOsIngredientesTreino)):
             xTeste.append(0)
         for ingrediente in (i['ingredients']):
@@ -130,8 +130,9 @@ def main():
 
     writer = csv.writer(open('submission.csv', 'wt'))
     writer.writerow(['id', 'cuisine'])
+    print(len(idsTeste))
     for i in range (0, len(idsTeste)):
-        writer.writerow(idsTeste[i], yTeste[i])
+        writer.writerow([idsTeste[i], yTeste[i]])
 
     print('Result saved in file: submission.csv')
 
