@@ -1,3 +1,4 @@
+import csv
 import json
 from pprint import pprint
 import numpy as np
@@ -119,14 +120,24 @@ def main():
     clf = neighbors.KNeighborsClassifier(15, weights='uniform')
     clf.fit(xsTreino, yTreino)
 
+
+
     yTeste = clf.predict(xsTeste)
     print (len(yTeste))
-    yTeste = clf.inverse_transform(yTeste)
+ #   yTeste = clf.inverse_transform(yTeste)
 
+
+
+    writer = csv.writer(open('submission.csv', 'wt'))
+    writer.writerow(['id', 'cuisine'])
+    for i in range (0, len(idsTeste)):
+        writer.writerow(idsTeste[i], yTeste[i])
+
+    print('Result saved in file: submission.csv')
 
     # result_dict = dict(zip(id, maiorScore))
-    print("Melhores resultados: Weight: uniform, k = 15, Score: %f" % (yTeste))
-    return
+ #   print("Melhores resultados: Weight: uniform, k = 15, Score: %f" % (yTeste))
+ #   return
 
 
 if __name__ == '__main__':
