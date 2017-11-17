@@ -42,6 +42,9 @@ def criarTodosOsIngrediente(dataTreino, dataTeste):
 
     todosOsIngredientesTreino =  [x for x in set(todosOsIngredientesTreino)]
     todosOsIngredientesTeste = [x for x in set(todosOsIngredientesTeste)]
+   # print(todosOsIngredientesTeste)
+    #print(todosOsIngredientesTreino)
+
 
 
     return todosOsIngredientesTreino, todosOsIngredientesTeste
@@ -60,14 +63,14 @@ def criarXSYIDS(dicionarioDeJson, todosOsIngredientes):
                 cont = cont + 1;
         quant.append(cont)
 
-    quant, todosOsIngredientes = zip(*sorted(zip(quant, todosOsIngredientes)))
+    #quant, todosOsIngredientes = zip(*sorted(zip(quant, todosOsIngredientes)))
     #print(quant)
     # print(todosOsIngredientes)
     ingredientesMaioresQue100 = []
     quantIngredientesMaioresQue100 = []
 
     for i in range(0, len(todosOsIngredientes)):
-        if quant[i] >= 20:
+        if quant[i] >= 930:
             ingredientesMaioresQue100.append(todosOsIngredientes[i])
             quantIngredientesMaioresQue100.append(quant[i])
 
@@ -76,9 +79,9 @@ def criarXSYIDS(dicionarioDeJson, todosOsIngredientes):
         id.append(str(i['id']))
         for j in ingredientesMaioresQue100:
             if j in i['ingredients']:
-                xIngredientes.append(1)
+                xIngredientes.append(True)
             else:
-                xIngredientes.append(0)
+                xIngredientes.append(False)
         xs.append(xIngredientes)
         y.append(i['cuisine'])
     return xs, y, id, ingredientesMaioresQue100
@@ -90,11 +93,11 @@ def retornaTeste(todosOsIngredientesTreino, dicionarioDeJsonTEste, todosOsIngred
     for i in (dicionarioDeJsonTEste):
         xTeste = []
         for j in range(0, len(todosOsIngredientesTreino)):
-            xTeste.append(0)
+            xTeste.append(False)
         for ingrediente in (i['ingredients']):
             for j in range(0, len(todosOsIngredientesTreino)):
                 if ingrediente == todosOsIngredientesTreino[j] and ingrediente in todosOsIngredientesTeste:
-                    xTeste[j] = 1
+                    xTeste[j] = True
                     todosOsIngredientesTeste.remove(ingrediente)
         xsTeste.append(xTeste)
         ids.append(str(i['id']))
@@ -117,7 +120,7 @@ def main():
     # print(xs[0])
     # print(y[0])
     # X_train, X_test, y_train, y_test = train_test_split(xs, y, test_size=0.3, random_state=0)
-    clf = neighbors.KNeighborsClassifier(15, weights='uniform')
+    clf = neighbors.KNeighborsClassifier(15, weights='distance')
     clf.fit(xsTreino, yTreino)
 
 
@@ -125,8 +128,6 @@ def main():
     yTeste = clf.predict(xsTeste)
     print (len(yTeste))
  #   yTeste = clf.inverse_transform(yTeste)
-
-
 
     writer = csv.writer(open('submission.csv', 'wt'))
     writer.writerow(['id', 'cuisine'])
@@ -137,7 +138,7 @@ def main():
     print('Result saved in file: submission.csv')
 
     # result_dict = dict(zip(id, maiorScore))
- #   print("Melhores resultados: Weight: uniform, k = 15, Score: %f" % (yTeste))
+    #print("Melhores resultados: Weight: uniform, k = 15, Score: %f" % (clf.score(xsTeste, yTeste)))
  #   return
 
 
