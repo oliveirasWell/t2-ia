@@ -124,7 +124,6 @@ def main():
     clf.fit(xsTreino, yTreino)
 
 
-
     yTeste = clf.predict(xsTeste)
     print (len(yTeste))
  #   yTeste = clf.inverse_transform(yTeste)
