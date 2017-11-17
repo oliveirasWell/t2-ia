@@ -14,24 +14,26 @@ def leArquivoJson():
         dataTreino = json.load(data_file1)
     with open('test.json') as data_file2:
         dataTeste = json.load(data_file2)
-
     return dataTreino, dataTeste
 
 
 def criarTodosOsIngrediente(dataTreino, dataTeste):
+
     # Acrescenta os ingredientes do conjunto de treino em ingredientes
     ingredientes = []
     for j in dataTreino:
         ingredientes.append(j['ingredients'])
+
     todosOsIngredientesTreino = []
     for i in range(0, len(ingredientes)):
         for j in range(0, len(ingredientes[i])):
             todosOsIngredientesTreino.append((ingredientes[i][j]))
 
-            # Acrescenta os ingredientes do conjunto de teste em ingredientes
+    # Acrescenta os ingredientes do conjunto de teste em ingredientes
     ingredientes = []
     for j in dataTeste:
         ingredientes.append(j['ingredients'])
+
     todosOsIngredientesTeste = []
     for i in range(0, len(ingredientes)):
         for j in range(0, len(ingredientes[i])):
@@ -116,10 +118,14 @@ def main():
     # X_train, X_test, y_train, y_test = train_test_split(xs, y, test_size=0.3, random_state=0)
     clf = neighbors.KNeighborsClassifier(15, weights='uniform')
     clf.fit(xsTreino, yTreino)
-    maiorScore = clf.predict(xsTeste)
-    print(maiorScore)
+
+    yTeste = clf.predict(xsTeste)
+    print (len(yTeste))
+    yTeste = clf.inverse_transform(yTeste)
+
+
     # result_dict = dict(zip(id, maiorScore))
-    print("Melhores resultados: Weight: uniform, k = 15, Score: %f" % (maiorScore))
+    print("Melhores resultados: Weight: uniform, k = 15, Score: %f" % (yTeste))
     return
 
 

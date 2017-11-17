@@ -24,6 +24,8 @@ for d,dish in enumerate(ingredients):
         if ingredient in dish:
             big_data_matrix[d,i] = True
 
+print(big_data_matrix)
+
 clf2 = BernoulliNB(alpha = 0, fit_prior = False)
 f = clf2.fit(big_data_matrix, classes)
 result = [(ref == res, ref, res) for (ref, res) in zip(classes, clf2.predict(big_data_matrix))]
@@ -42,6 +44,7 @@ for d,dish in enumerate(ingredients_test):
         if ingredient in dish:
             big_test_matrix[d,i] = True
 print(big_test_matrix)
+
 result_test = clf2.predict(big_test_matrix)
 ids = [item['id'] for item in test_data]
 result_dict = dict(zip(ids, result_test))

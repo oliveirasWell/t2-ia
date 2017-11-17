@@ -1,11 +1,10 @@
 import json
-from pprint import pprint
+import scipy as scipy
 import numpy as np
+from pprint import pprint
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from sklearn import neighbors, datasets
-import numpy as np
-import scipy as scipy
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import NearestNeighbors
 
@@ -19,32 +18,15 @@ def leArquivoJson():
 
 
 def criarTodosOsIngrediente(dataTreino, dataTeste):
-    culinariaTreino = [item['cuisine'] for item in dataTreino]
-    ingredientsTreino = [item['ingredients'] for item in dataTreino]
-    ingredientesUnicosTreino = set(item for sublist in ingredientsTreino for item in sublist)
-    culinariaUnicaTreino = set(culinariaTreino)
+    # Acrescenta os ingredientes do conjunto de treino em ingredientes
+    ingredientesTreino = [item['ingredients'] for item in dataTreino]
+    ingredientesUnicosTreino = set(item for sublist in ingredientesTreino for item in sublist)
 
-    big_data_matrix_treino = scipy.sparse.dok_matrix((len(ingredientsTreino), len(ingredientesUnicosTreino)), dtype=np.dtype(bool))
+    # Acrescenta os ingredientes do conjunto de teste em ingredientes
+    ingredientesTeste = [item['ingredients'] for item in dataTeste]
+#    ingredientesUnicosTeste = set(item for sublist in ingredientesTeste for item in sublist)
 
-    for d, prato in enumerate(ingredientsTreino):
-        for i, ingredient in enumerate(ingredientesUnicosTreino):
-            if ingredient in prato:
-                big_data_matrix_treino[d, i] = True
-
-    culinariaTeste = [item['cuisine'] for item in dataTeste]
-    ingredientsTeste = [item['ingredients'] for item in dataTeste]
-    ingredientesUnicosTeste = set(item for sublist in ingredientsTeste for item in sublist)
-    culinariaUnicaTeste = set(culinariaTeste)
-
-    big_data_matrix_teste = scipy.sparse.dok_matrix((len(ingredientsTeste), len(ingredientesUnicosTeste)), dtype=np.dtype(bool))
-
-    for d, prato in enumerate(ingredientsTeste):
-        for i, ingredient in enumerate(ingredientesUnicosTeste):
-            if ingredient in prato:
-                big_data_matrix_teste[d, i] = True
-
-    return big_data_matrix_treino, big_data_matrix_teste
-
+    return ingredientesTreino, ingredientesUnicosTreino, ingredientesTeste
 
 def criarXSYIDS(dicionarioDeJson, todosOsIngredientes):
     id = []
@@ -82,7 +64,6 @@ def criarXSYIDS(dicionarioDeJson, todosOsIngredientes):
         y.append(i['cuisine'])
     return xs, y, id, ingredientesMaioresQue100
 
-
 def retornaTeste(todosOsIngredientesTreino, dicionarioDeJsonTEste, todosOsIngredientesTeste):
     xsTeste = []
     for i in (dicionarioDeJsonTEste):
@@ -99,28 +80,47 @@ def retornaTeste(todosOsIngredientesTreino, dicionarioDeJsonTEste, todosOsIngred
         ids.append(str(i['id']))
     return xsTeste, ids
 
+def criarMatrizesEsparsas(ingredientesTreino, ingredientesUnicosTreino, ingredientesTeste):
 
+    big_data_matrix = scipy.sparse.dok_matrix((len(ingredientesTreino), len(ingredientesUnicosTreino)), dtype=np.dtype(bool))
+    big_test_matrix = scipy.sparse.dok_matrix((len(ingredientesTeste), len(ingredientesUnicosTreino)), dtype=np.dtype(bool))
+
+    for d, prato in enumerate(ingredientesTreino):
+        for i, ingredient in enumerate(ingredientesUnicosTreino):
+            if ingredient in prato:
+                big_data_matrix[d, i] = True
+
+    for d, dish in enumerate(ingredientesTeste):
+        for i, ingredient in enumerate(ingredientesUnicosTreino):
+            if ingredient in dish:
+                big_test_matrix[d, i] = True
+
+    return big_data_matrix, big_test_matrix
 
 def main():
-    dicionarioDeJsonTrieno, dicionarioDeJsonTEste = leArquivoJson()
+    dicionarioDeJsonTreino, dicionarioDeJsonTEste = leArquivoJson()
 
-    todosOsIngredientesTreino, todosOsIngredientesTeste = criarTodosOsIngrediente(dicionarioDeJsonTrieno, dicionarioDeJsonTEste)
+    todosOsIngredientesTreino, ingredientesUnicosTreino, todosOsIngredientesTeste = criarTodosOsIngrediente(dicionarioDeJsonTreino, dicionarioDeJsonTEste)
     #print(todosOsIngredientesTeste)
 
-    xsTreino, yTreino, idTreino, ingredientesMaioresQue100 = criarXSYIDS(dicionarioDeJsonTrieno, todosOsIngredientesTreino)
-    xsTeste, idsTeste = retornaTeste(ingredientesMaioresQue100, dicionarioDeJsonTEste, todosOsIngredientesTeste)
+    big_data_matrix, big_test_matrix = criarMatrizesEsparsas(todosOsIngredientesTreino, ingredientesUnicosTreino, todosOsIngredientesTeste)
+
+    print(big_data_matrix, big_test_matrix)
+
+ #   xsTreino, yTreino, idTreino, ingredientesMaioresQue100 = criarXSYIDS(dicionarioDeJsonTreino, todosOsIngredientesTreino)
+ #   xsTeste, idsTeste = retornaTeste(ingredientesMaioresQue100, dicionarioDeJsonTEste, todosOsIngredientesTeste)
     # xsTeste, yTeste, idTeste = criarXSYIDS(dicionarioDeJsonTEste, todosOsIngredientesTeste)
-    print(len(xsTreino[0]))
-    print(len(xsTeste[0]))
+ #   print(len(xsTreino[0]))
+ #   print(len(xsTeste[0]))
     # print(id[0])
     # print(xs[0])
     # print(y[0])
     # X_train, X_test, y_train, y_test = train_test_split(xs, y, test_size=0.3, random_state=0)
-    clf = neighbors.KNeighborsClassifier(15, weights='uniform')
-    clf.fit(xsTreino, yTreino)
-    maiorScore = clf.score(xsTeste, yTreino)
+ #  clf = neighbors.KNeighborsClassifier(15, weights='uniform')
+ #   clf.fit(xsTreino, yTreino)
+ #   maiorScore = clf.score(xsTeste, yTreino)
     # result_dict = dict(zip(id, maiorScore))
-    print("Melhores resultados: Weight: uniform, k = 15, Score: %f" % (maiorScore))
+ #   print("Melhores resultados: Weight: uniform, k = 15, Score: %f" % (maiorScore))
     return
 
 

@@ -18,6 +18,8 @@ test_id = [e['id'] for e in test_data]
 le = LabelEncoder()
 ngram_vectorizer = CountVectorizer()
 train_Y = le.fit_transform(train_Y)
+print (train_Y)
+
 train_X = ngram_vectorizer.fit_transform(train_X).toarray()
 test_X = ngram_vectorizer.transform(test_X).toarray()
 
