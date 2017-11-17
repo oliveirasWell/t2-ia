@@ -128,7 +128,15 @@ def main():
     yTeste = clf.predict(xsTeste)
     print (len(yTeste))
  #   yTeste = clf.inverse_transform(yTeste)
+    acertos = 0
 
+    #Função mentirosa
+    for i in range (0, len(yTeste)):
+        if yTreino[i] == yTeste[i]:
+            acertos = acertos + 1
+
+
+    print("Score: %f" %(acertos/len(yTeste)))
     writer = csv.writer(open('submission.csv', 'wt'))
     writer.writerow(['id', 'cuisine'])
     print(len(idsTeste))
