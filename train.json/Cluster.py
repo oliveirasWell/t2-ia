@@ -12,7 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from sklearn import linear_model, datasets
-from sklearn.naive_bayes import BernoulliNB
+from sklearn.cluster import KMeans
 
 def leArquivoJson():
     with open('train.json') as data_file1:
@@ -31,7 +31,7 @@ def main():
 
     yTreino = [item['cuisine'] for item in dicionarioDeJsonTrieno]
     #unique_cuisines = set(yTreino)
-
+    
     xTreino = scipy.sparse.dok_matrix((len(ingredientesTreino), len(ingredientesSemRepeticaoTreino)), dtype=np.dtype(bool))
 
 
@@ -40,7 +40,7 @@ def main():
             if ingredient in exemplo:
                 xTreino[numeroPrato,numeroIngrediente] = True
 
-    clf = BernoulliNB(alpha=1, fit_prior=False)
+    clf = KMeans(n_clusters=20, random_state=0)
 
     clf.fit(xTreino, yTreino)
 
@@ -55,12 +55,12 @@ def main():
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))
 
-    writer = csv.writer(open('nayve.csv', 'wt'))
+    writer = csv.writer(open('cluster.csv', 'wt'))
     writer.writerow(['id','cuisine'])
     for key, value in result_dict.items():
        writer.writerow([key, value])
 
-    print('Result saved in file: nayve.csv')
+    print('Result saved in file: cluster.csv')
 
 if __name__ == '__main__':
     main()
