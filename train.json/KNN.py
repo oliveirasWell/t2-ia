@@ -70,7 +70,7 @@ def criarXSYIDS(dicionarioDeJson, todosOsIngredientes):
     quantIngredientesMaioresQue100 = []
 
     for i in range(0, len(todosOsIngredientes)):
-        if quant[i] >= 930:
+        if quant[i] >= 100:
             ingredientesMaioresQue100.append(todosOsIngredientes[i])
             quantIngredientesMaioresQue100.append(quant[i])
 
@@ -147,6 +147,7 @@ def main():
     # result_dict = dict(zip(id, maiorScore))
     #print("Melhores resultados: Weight: uniform, k = 15, Score: %f" % (clf.score(xsTeste, yTeste)))
  #   return
+
 
 if __name__ == '__main__':
     main()

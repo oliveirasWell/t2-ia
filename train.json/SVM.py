@@ -12,7 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from sklearn import linear_model, datasets
-from sklearn.naive_bayes import BernoulliNB
+from sklearn import svm
 
 def leArquivoJson():
     with open('train.json') as data_file1:
@@ -40,7 +40,7 @@ def main():
             if ingredient in exemplo:
                 xTreino[numeroPrato,numeroIngrediente] = True
 
-    clf = BernoulliNB(alpha=0, fit_prior=False)
+    clf = svm.SVC(decision_function_shape='ovo')
 
     clf.fit(xTreino, yTreino)
 
@@ -55,12 +55,12 @@ def main():
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))
 
-    writer = csv.writer(open('nayve.csv', 'wt'))
+    writer = csv.writer(open('SVM.csv', 'wt'))
     writer.writerow(['id','cuisine'])
     for key, value in result_dict.items():
        writer.writerow([key, value])
 
-    print('Result saved in file: nayve.csv')
+    print('Result saved in file: SVM.csv')
 
 if __name__ == '__main__':
     main()
