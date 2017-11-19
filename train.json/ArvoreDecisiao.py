@@ -55,6 +55,7 @@ def main():
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))
 
+
     writer = csv.writer(open('ArvoreDecisao.csv', 'wt'))
     writer.writerow(['id','cuisine'])
     for key, value in result_dict.items():
