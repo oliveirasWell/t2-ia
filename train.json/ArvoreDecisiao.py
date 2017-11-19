@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from sklearn import linear_model, datasets
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV
 
 def leArquivoJson():
     with open('train.json') as data_file1:
@@ -40,7 +42,9 @@ def main():
             if ingredient in exemplo:
                 xTreino[numeroPrato,numeroIngrediente] = True
 
-    clf =  DecisionTreeClassifier(max_depth=10)
+    #param_grid = {'max_depth': np.arange(3, 10)}
+    param_grid = {'criterion':['gini','entropy'],'max_depth':[4,5,6,7,8,9,10,11,12,15,20,30,40,50,70,90,120,150]}
+    clf =  GridSearchCV(DecisionTreeClassifier(), param_grid)
 
     clf.fit(xTreino, yTreino)
 
@@ -59,7 +63,7 @@ def main():
     writer.writerow(['id','cuisine'])
     for key, value in result_dict.items():
        writer.writerow([key, value])
-
+    print(clf.best_params_)
     print('Result saved in file: ArvoreDecisao.csv')
 
 if __name__ == '__main__':

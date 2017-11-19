@@ -8,14 +8,15 @@ from sklearn import neighbors, datasets
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import NearestNeighbors
-from sklearn import svm
 
 
 def leArquivoJson():
     with open('train.json') as data_file1:
         dataTreino = json.load(data_file1)
+    data_file1.close()
     with open('test.json') as data_file2:
         dataTeste = json.load(data_file2)
+    data_file2.close()
     return dataTreino, dataTeste
 
 
@@ -71,7 +72,7 @@ def criarXSYIDS(dicionarioDeJson, todosOsIngredientes):
     quantIngredientesMaioresQue100 = []
 
     for i in range(0, len(todosOsIngredientes)):
-        if quant[i] >= 1:
+        if quant[i] >= 930:
             ingredientesMaioresQue100.append(todosOsIngredientes[i])
             quantIngredientesMaioresQue100.append(quant[i])
 
@@ -121,8 +122,7 @@ def main():
     # print(xs[0])
     # print(y[0])
     # X_train, X_test, y_train, y_test = train_test_split(xs, y, test_size=0.3, random_state=0)
-    #clf = neighbors.KNeighborsClassifier(15, weights='distance')
-    clf = svm.SVC(kernel='linear', C=1)
+    clf = neighbors.KNeighborsClassifier(15, weights='distance')
     clf.fit(xsTreino, yTreino)
 
 
