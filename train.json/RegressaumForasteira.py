@@ -11,8 +11,7 @@ from pprint import pprint
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
-from sklearn import linear_model, datasets
-from sklearn import svm
+from sklearn.ensemble import RandomForestRegressor
 
 def leArquivoJson():
     with open('train.json') as data_file1:
@@ -40,7 +39,8 @@ def main():
             if ingredient in exemplo:
                 xTreino[numeroPrato,numeroIngrediente] = True
 
-    clf = svm.SVC(kernel='linear', C=1)
+    clf = RandomForestRegressor(max_depth=10, random_state=0)
+    #yTreino = clf.fit_transform(yTreino)
 
     clf.fit(xTreino, yTreino)
 
@@ -52,15 +52,16 @@ def main():
                 xTeste[numeroExemplo,numeroIngrediente] = True
 
     result_test = clf.predict(xTeste)
+    #result_test = clf.inverse_transform(result_test)
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))
 
-    writer = csv.writer(open('SVM.csv', 'wt'))
+    writer = csv.writer(open('RegressaoForasteira.csv', 'wt'))
     writer.writerow(['id','cuisine'])
     for key, value in result_dict.items():
        writer.writerow([key, value])
 
-    print('Result saved in file: SVM.csv')
+    print('Result saved in file: RegressaoForasteira.csv')
 
 if __name__ == '__main__':
     main()

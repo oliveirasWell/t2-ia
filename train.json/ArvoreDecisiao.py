@@ -12,7 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from sklearn import linear_model, datasets
-from sklearn import svm
+from sklearn.tree import DecisionTreeClassifier
 
 def leArquivoJson():
     with open('train.json') as data_file1:
@@ -40,7 +40,7 @@ def main():
             if ingredient in exemplo:
                 xTreino[numeroPrato,numeroIngrediente] = True
 
-    clf = svm.SVC(kernel='linear', C=1)
+    clf =  DecisionTreeClassifier(max_depth=10)
 
     clf.fit(xTreino, yTreino)
 
@@ -55,12 +55,12 @@ def main():
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))
 
-    writer = csv.writer(open('SVM.csv', 'wt'))
+    writer = csv.writer(open('ArvoreDecisao.csv', 'wt'))
     writer.writerow(['id','cuisine'])
     for key, value in result_dict.items():
        writer.writerow([key, value])
 
-    print('Result saved in file: SVM.csv')
+    print('Result saved in file: ArvoreDecisao.csv')
 
 if __name__ == '__main__':
     main()
