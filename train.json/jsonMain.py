@@ -126,29 +126,23 @@ def main():
     clf.fit(xsTreino, yTreino)
 
 
+
     yTeste = clf.predict(xsTeste)
     print (len(yTeste))
  #   yTeste = clf.inverse_transform(yTeste)
-    acertos = 0
 
-    #Função mentirosa
-    for i in range (0, len(yTeste)):
-        if yTreino[i] == yTeste[i]:
-            acertos = acertos + 1
-
-
-    print("Score: %f" %(acertos/len(yTeste)))
-    writer = csv.writer(open('KNN.csv', 'wt'))
+    writer = csv.writer(open('submission.csv', 'wt'))
     writer.writerow(['id', 'cuisine'])
     print(len(idsTeste))
     for i in range (0, len(idsTeste)):
         writer.writerow([idsTeste[i], yTeste[i]])
 
-    print('Result saved in file: KNN.csv')
+    print('Result saved in file: submission.csv')
 
     # result_dict = dict(zip(id, maiorScore))
     #print("Melhores resultados: Weight: uniform, k = 15, Score: %f" % (clf.score(xsTeste, yTeste)))
  #   return
+
 
 if __name__ == '__main__':
     main()
