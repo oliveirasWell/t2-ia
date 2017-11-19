@@ -12,7 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from sklearn import linear_model, datasets
-from sklearn.neighbors import NearestNeighbors
+from sklearn.neighbors import KNeighborsClassifier
 
 def leArquivoJson():
     with open('train.json') as data_file1:
@@ -40,7 +40,7 @@ def main():
             if ingredient in exemplo:
                 xTreino[numeroPrato,numeroIngrediente] = True
 
-    clf =  NearestNeighbors(n_neighbors=2)
+    clf =   KNeighborsClassifier(n_neighbors=3)
 
     clf.fit(xTreino, yTreino)
 
