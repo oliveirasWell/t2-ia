@@ -13,6 +13,12 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from sklearn import linear_model, datasets
 from sklearn import svm
+from sklearn.model_selection import GridSearchCV
+from sklearn.datasets import fetch_20newsgroups
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.svm import LinearSVC
+
+
 
 def leArquivoJson():
     with open('train.json') as data_file1:
@@ -40,7 +46,8 @@ def main():
             if ingredient in exemplo:
                 xTreino[numeroPrato,numeroIngrediente] = True
 
-    clf = svm.SVC(kernel='linear', C=1)
+    svc = LinearSVC(loss='l2', penalty='l2', dual=False, tol=1e-3)
+    clf = GridSearchCV(estimator=svc, param_grid={'C': [0.1, 1.0]})
 
     clf.fit(xTreino, yTreino)
 
