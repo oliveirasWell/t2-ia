@@ -8,6 +8,7 @@ from sklearn import neighbors, datasets
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import NearestNeighbors
+from sklearn.model_selection import GridSearchCV
 
 
 def leArquivoJson():
@@ -72,7 +73,7 @@ def criarXSYIDS(dicionarioDeJson, todosOsIngredientes):
     quantIngredientesMaioresQue100 = []
 
     for i in range(0, len(todosOsIngredientes)):
-        if quant[i] >= 930:
+        if quant[i] >= 50:
             ingredientesMaioresQue100.append(todosOsIngredientes[i])
             quantIngredientesMaioresQue100.append(quant[i])
 
@@ -116,19 +117,29 @@ def main():
     xsTreino, yTreino, idTreino, ingredientesMaioresQue100 = criarXSYIDS(dicionarioDeJsonTrieno, todosOsIngredientesTreino)
     xsTeste, idsTeste = retornaTeste(ingredientesMaioresQue100, dicionarioDeJsonTEste, todosOsIngredientesTeste)
     # xsTeste, yTeste, idTeste = criarXSYIDS(dicionarioDeJsonTEste, todosOsIngredientesTeste)
+
+
+
     print(len(xsTreino[0]))
     print(len(xsTeste[0]))
     # print(id[0])
     # print(xs[0])
     # print(y[0])
     # X_train, X_test, y_train, y_test = train_test_split(xs, y, test_size=0.3, random_state=0)
-    clf = neighbors.KNeighborsClassifier(15, weights='distance')
+    k_range = list(range(1, 31))
+    knn = neighbors.KNeighborsClassifier(15, weights='distance')
+    weight_options = ['uniform', 'distance']
+    param_grid = dict(n_neighbors=k_range, weights=weight_options)
+    #print(param_grid)
+    clf = GridSearchCV(knn, param_grid, cv=10, scoring='accuracy')
+
     clf.fit(xsTreino, yTreino)
 
 
 
     yTeste = clf.predict(xsTeste)
-    print (len(yTeste))
+    print(clf.best_params_)
+    #print (len(yTeste))
  #   yTeste = clf.inverse_transform(yTeste)
 
     writer = csv.writer(open('submission.csv', 'wt'))

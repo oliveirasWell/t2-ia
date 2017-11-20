@@ -12,6 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from sklearn import linear_model, datasets
+from sklearn.model_selection import GridSearchCV
 
 def leArquivoJson():
     with open('train.json') as data_file1:
@@ -39,7 +40,8 @@ def main():
             if ingredient in exemplo:
                 xTreino[numeroPrato,numeroIngrediente] = True
 
-    clf = linear_model.LogisticRegression(C=1e5)
+    param_grid = {'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000] }
+    clf = GridSearchCV(linear_model.LogisticRegression(penalty='l2'), param_grid)
 
     clf.fit(xTreino, yTreino)
 
