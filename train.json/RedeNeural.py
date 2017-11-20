@@ -13,7 +13,12 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from sklearn import linear_model, datasets
 from sklearn.neural_network import MLPClassifier
+
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import GridSearchCV
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import MinMaxScaler
 import itertools
 
 def leArquivoJson():
@@ -43,19 +48,21 @@ def main():
             if ingredient in exemplo:
                 xTreino[numeroPrato, numeroIngrediente] = True
 
-
-    parameters = {
-        'learning_rate': ['constant', 'invscaling', 'adaptive'],
-        'hidden_layer_sizes': [x for x in itertools.product((10,20,30,40,50,100),repeat=3)],
-        'alpha': [10.0 ** -np.arange(1, 7)],
-        'activation': ['logistic', 'relu', 'Tanh']
+    parameters={
+        'learning_rate': ["constant", "invscaling", "adaptive"],
+        'activation': ["logistic", "relu", "Tanh"],
+        'solver': ['lbfgs', 'sgd', 'adam'],
+        'alpha': [0.0001, 0.001, 0.01, 0.1, 1]
     }
 
-    clf = GridSearchCV(estimator=MLPClassifier(), param_grid=parameters, n_jobs=-1, verbose=2, cv=10)
+    clf = MLPClassifier()
+    gs = GridSearchCV(clf, param_grid=parameters)
+    #clf = GridSearchCV(estimator=MLPClassifier(), param_grid=parameters, n_jobs=-1, verbose=2, cv=10)
+
     #clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(5, 2), random_state=1)
 
 
-    clf.fit(xTreino, yTreino)
+    gs.fit(xTreino, yTreino)
 
     ingredientesTeste = [item['ingredients'] for item in dicionarioDeJsonTEste]
     xTeste = scipy.sparse.dok_matrix((len(ingredientesTeste), len(ingredientesSemRepeticaoTreino)),
@@ -65,10 +72,10 @@ def main():
             if ingredient in dish:
                 xTeste[numeroExemplo, numeroIngrediente] = True
 
-    result_test = clf.predict(xTeste)
+    result_test = gs.predict(xTeste)
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))
-
+    print(clf.best_params_)
     writer = csv.writer(open('redeNeural.csv', 'wt'))
     writer.writerow(['id', 'cuisine'])
     for key, value in result_dict.items():
