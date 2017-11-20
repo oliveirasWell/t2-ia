@@ -13,7 +13,8 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from sklearn import linear_model, datasets
 from sklearn.neural_network import MLPClassifier
-
+from sklearn.model_selection import GridSearchCV
+import itertools
 
 def leArquivoJson():
     with open('train.json') as data_file1:
@@ -42,7 +43,17 @@ def main():
             if ingredient in exemplo:
                 xTreino[numeroPrato, numeroIngrediente] = True
 
-    clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(5, 2), random_state=1)
+
+    parameters = {
+        'learning_rate': ['constant', 'invscaling', 'adaptive'],
+        'hidden_layer_sizes': [x for x in itertools.product((10,20,30,40,50,100),repeat=3)],
+        'alpha': [10.0 ** -np.arange(1, 7)],
+        'activation': ['logistic', 'relu', 'Tanh']
+    }
+
+    clf = GridSearchCV(estimator=MLPClassifier(), param_grid=parameters, n_jobs=-1, verbose=2, cv=10)
+    #clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(5, 2), random_state=1)
+
 
     clf.fit(xTreino, yTreino)
 
