@@ -11,7 +11,10 @@ from pprint import pprint
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
+from sklearn import preprocessing
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import RandomizedSearchCV
 
 def leArquivoJson():
     with open('train.json') as data_file1:
@@ -29,20 +32,37 @@ def main():
     ingredientesSemRepeticaoTreino = set(item for sublist in ingredientesTreino for item in sublist)
 
     yTreino = [item['cuisine'] for item in dicionarioDeJsonTrieno]
-    #unique_cuisines = set(yTreino)
+
 
     xTreino = scipy.sparse.dok_matrix((len(ingredientesTreino), len(ingredientesSemRepeticaoTreino)), dtype=np.dtype(bool))
 
+    param_grid = {"max_depth": [3, None],
+                  "max_features": [1, 3, 10],
+                  "min_samples_split": [2, 3, 10],
+                  "min_samples_leaf": [1, 3, 10],
+                  "bootstrap": [True, False],
+                  "criterion": ["gini", "entropy"]}
 
     for numeroPrato,exemplo in enumerate(ingredientesTreino):
         for numeroIngrediente,ingredient in enumerate(ingredientesSemRepeticaoTreino):
             if ingredient in exemplo:
                 xTreino[numeroPrato,numeroIngrediente] = True
 
-    clf = RandomForestRegressor(max_depth=10, random_state=0)
-    #yTreino = clf.fit_transform(yTreino)
+    clf = RandomForestClassifier(n_estimators=20)
+    grid_search = GridSearchCV(clf, param_grid=param_grid)
 
-    clf.fit(xTreino, yTreino)
+    # specify parameters and distributions to sample from
+    #param_dist = {"max_depth": [3, None], "max_features": sp_randint(1, 11),
+              #"min_samples_split": sp_randint(1, 11),
+              #"min_samples_leaf": sp_randint(1, 11),
+              #"bootstrap": [True, False],
+              #"criterion": ["gini", "entropy"]}
+
+    # run randomized search
+    #n_iter_search = 20
+    #random_search = RandomizedSearchCV(clf, param_distributions=param_dist, n_iter=n_iter_search)
+
+    grid_search.fit(xTreino, yTreino)
 
     ingredientesTeste = [item['ingredients'] for item in dicionarioDeJsonTEste]
     xTeste = scipy.sparse.dok_matrix((len(ingredientesTeste), len(ingredientesSemRepeticaoTreino)), dtype=np.dtype(bool))
@@ -51,8 +71,10 @@ def main():
             if ingredient in dish:
                 xTeste[numeroExemplo,numeroIngrediente] = True
 
-    result_test = clf.predict(xTeste)
-    #result_test = clf.inverse_transform(result_test)
+
+    result_test = grid_search.predict(xTeste)
+
+
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))
 
