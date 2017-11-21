@@ -35,9 +35,8 @@ def main():
 
     parameters = {'binarize': [0.0],
                   'fit_prior': [False, True],
-                  'alpha': [1e-3, 1e-2]}
-    global_cv = 10
-    clf = GridSearchCV(BernoulliNB(), parameters, n_jobs=-1, scoring="f1", refit=True)
+                  'alpha': [0.0001, 1e-3, 1e-2, 0.1, 1]}
+    clf = GridSearchCV(BernoulliNB(), parameters, n_jobs=-1, refit=True, cv = 5)
     clf.fit(xTreino, yTreino)
 
     ingredientesTeste = [item['ingredients'] for item in dicionarioDeJsonTEste]

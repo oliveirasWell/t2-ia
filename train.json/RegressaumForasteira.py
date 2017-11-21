@@ -40,7 +40,7 @@ def main():
                 xTreino[numeroPrato,numeroIngrediente] = True
 
     clf = RandomForestClassifier(n_estimators=20)
-    grid_search = GridSearchCV(clf, param_grid=param_grid)
+    grid_search = GridSearchCV(clf, param_grid=param_grid, cv = 5)
 
     # specify parameters and distributions to sample from
     #param_dist = {"max_depth": [3, None], "max_features": sp_randint(1, 11),
