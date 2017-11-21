@@ -36,7 +36,7 @@ def main():
                 xTreino[numeroPrato,numeroIngrediente] = True
 
     svc = LinearSVC(loss='l2', penalty='l2', dual=False, tol=1e-3)
-    clf = GridSearchCV(estimator=svc, param_grid={'C': [0.1, 1.0]})
+    clf = GridSearchCV(estimator=svc, param_grid={'C': [0.1, 1.0]}, cv = 5)
 
     clf.fit(xTreino, yTreino)
 

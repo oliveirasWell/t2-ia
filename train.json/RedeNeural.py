@@ -35,11 +35,18 @@ def main():
             if ingredient in exemplo:
                 xTreino[numeroPrato, numeroIngrediente] = True
 
-    parameters={
-        'learning_rate': ["constant", "invscaling", "adaptive"],
-        'activation': ["logistic", "relu", "Tanh"],
-        'solver': ['lbfgs', 'sgd', 'adam'],
-        'alpha': [0.0001, 0.001, 0.01, 0.1, 1]
+    #parameters={
+     #   'learning_rate': ["constant"],
+     #   'activation': ["logistic", "relu"],
+     #   #'solver': ['lbfgs', 'sgd', 'adam'],
+     #   'alpha': [0.0001, 0.001]
+    #}
+
+    parameters = {
+    'learning_rate': ["constant", "invscaling", "adaptive"],
+    'hidden_layer_sizes': [(100,1), (100,2), (100,3)],
+    'alpha': [10.0],
+    'activation': ["logistic", "relu", "Tanh"]
     }
 
     clf = MLPClassifier()
@@ -62,7 +69,7 @@ def main():
     result_test = gs.predict(xTeste)
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))
-    print(clf.best_params_)
+    print(gs.best_params_)
     writer = csv.writer(open('redeNeural.csv', 'wt'))
     writer.writerow(['id', 'cuisine'])
     for key, value in result_dict.items():
