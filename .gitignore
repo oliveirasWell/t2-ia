@@ -121,3 +121,10 @@ saida.csv
 *.csv
 
 packages.xml
+
+/_windows/
+/inspection/
+/conda_packages.xml
+/debugger.xml
+/diff.xml
+/web-browsers.xml
