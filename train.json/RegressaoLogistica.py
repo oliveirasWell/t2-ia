@@ -1,17 +1,10 @@
 #! /usr/bin/python3
 
-import json as js
-import csv as csv
 import scipy as scipy
-import numpy as np
-import pdb
 import csv
 import json
-from pprint import pprint
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
-from sklearn import linear_model, datasets
+from sklearn import linear_model
 from sklearn.model_selection import GridSearchCV
 
 def leArquivoJson():

@@ -1,25 +1,12 @@
 #! /usr/bin/python3
 
-import json as js
-import csv as csv
 import scipy as scipy
-import numpy as np
-import pdb
 import csv
 import json
-from pprint import pprint
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
-from sklearn import linear_model, datasets
 from sklearn.neural_network import MLPClassifier
 
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import GridSearchCV
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import MinMaxScaler
-import itertools
 
 def leArquivoJson():
     with open('train.json') as data_file1:

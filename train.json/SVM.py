@@ -1,21 +1,10 @@
 #! /usr/bin/python3
 
-import json as js
-import csv as csv
 import scipy as scipy
-import numpy as np
-import pdb
 import csv
 import json
-from pprint import pprint
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
-from sklearn import linear_model, datasets
-from sklearn import svm
 from sklearn.model_selection import GridSearchCV
-from sklearn.datasets import fetch_20newsgroups
-from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.svm import LinearSVC
 
 
