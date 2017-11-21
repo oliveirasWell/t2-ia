@@ -142,7 +142,7 @@ def main():
         writer.writerow([idsTeste[i], yTeste[i]])
 
     print('Result saved in file: submission.csv')
-
+    print(clf.best_params_)
     # result_dict = dict(zip(id, maiorScore))
     #print("Melhores resultados: Weight: uniform, k = 15, Score: %f" % (clf.score(xsTeste, yTeste)))
  #   return
