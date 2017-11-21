@@ -64,7 +64,7 @@ def main():
 
 
     result_test = grid_search.predict(xTeste)
-    print(clf.best_params_)
+    print(grid_search.best_params_)
 
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))

@@ -44,7 +44,7 @@ def main():
 
     parameters = {
     'learning_rate': ["constant", "invscaling", "adaptive"],
-    'hidden_layer_sizes': [(100,1), (100,2), (100,3)],
+    'hidden_layer_sizes': [(1,3)],
     'alpha': [10.0],
     'activation': ["logistic", "relu", "Tanh"]
     }

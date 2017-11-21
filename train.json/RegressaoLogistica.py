@@ -48,12 +48,12 @@ def main():
     result_test = clf.predict(xTeste)
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))
-    print(clf.best_params_)
+
     writer = csv.writer(open('regressaumlogistica.csv', 'wt'))
     writer.writerow(['id','cuisine'])
     for key, value in result_dict.items():
        writer.writerow([key, value])
-
+    print(clf.best_params_)
     print('Result saved in file: regressaumlogistica.csv')
 
 if __name__ == '__main__':
