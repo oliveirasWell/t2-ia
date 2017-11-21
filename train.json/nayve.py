@@ -5,6 +5,7 @@ import csv
 import json
 import numpy as np
 from sklearn.naive_bayes import BernoulliNB
+from sklearn.model_selection import GridSearchCV
 
 def leArquivoJson():
     with open('train.json') as data_file1:
@@ -32,8 +33,11 @@ def main():
             if ingredient in exemplo:
                 xTreino[numeroPrato,numeroIngrediente] = True
 
-    clf = BernoulliNB(alpha=1, fit_prior=False)
-
+    parameters = {'binarize': [0.0],
+                  'fit_prior': [False, True],
+                  'alpha': [1e-3, 1e-2]}
+    global_cv = 10
+    clf = GridSearchCV(BernoulliNB(), parameters, n_jobs=-1, scoring="f1", refit=True)
     clf.fit(xTreino, yTreino)
 
     ingredientesTeste = [item['ingredients'] for item in dicionarioDeJsonTEste]

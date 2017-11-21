@@ -34,7 +34,7 @@ def main():
                 xTreino[numeroPrato,numeroIngrediente] = True
 
     param_grid = {'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000] }
-    clf = GridSearchCV(linear_model.LogisticRegression(penalty='l2'), param_grid)
+    clf = GridSearchCV(linear_model.LogisticRegression(penalty='l2'), param_grid, cv=5)
 
     clf.fit(xTreino, yTreino)
 

@@ -8,10 +8,10 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import GridSearchCV
 
 def leArquivoJson():
-    with open('train.json') as data_file1:
+    with open('outros/train.json') as data_file1:
         dataTreino = json.load(data_file1)
     data_file1.close()
-    with open('test.json') as data_file2:
+    with open('outros/test.json') as data_file2:
         dataTeste = json.load(data_file2)
     data_file2.close()
     return dataTreino, dataTeste
@@ -34,7 +34,7 @@ def main():
                 xTreino[numeroPrato,numeroIngrediente] = True
 
     #param_grid = {'max_depth': np.arange(3, 10)}
-    param_grid = {'criterion':['gini','entropy'],'max_depth':[4,5,6,7,8,9,10,11,12,15,20,30,40,50,70,90,120,150, 200]}
+    param_grid = {'criterion':['gini','entropy'],'max_depth':[4,5,6,7,8,9,10,11,12,15,20,30,40,50,70,90,120,150, 200, 250, 275]}
     clf =  GridSearchCV(DecisionTreeClassifier(), param_grid)
 
     clf.fit(xTreino, yTreino)
