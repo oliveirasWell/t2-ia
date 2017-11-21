@@ -43,7 +43,7 @@ def main():
     }
 
     clf = MLPClassifier()
-    gs = GridSearchCV(clf, param_grid=parameters)
+    gs = GridSearchCV(clf, param_grid=parameters, cv = 5)
     #clf = GridSearchCV(estimator=MLPClassifier(), param_grid=parameters, n_jobs=-1, verbose=2, cv=10)
 
     #clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(5, 2), random_state=1)

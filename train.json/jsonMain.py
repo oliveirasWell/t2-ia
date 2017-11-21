@@ -122,7 +122,7 @@ def main():
     k_range = list(range(1, 31))
     knn = neighbors.KNeighborsClassifier(15, weights='distance')
     weight_options = ['uniform', 'distance']
-    param_grid = dict(n_neighbors=k_range, weights=weight_options)
+    param_grid = dict(n_neighbors=k_range, weights=weight_options, cv = 5)
     #print(param_grid)
     clf = GridSearchCV(knn, param_grid, cv=10, scoring='accuracy')
 

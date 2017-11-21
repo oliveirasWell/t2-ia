@@ -35,7 +35,7 @@ def main():
 
     #param_grid = {'max_depth': np.arange(3, 10)}
     param_grid = {'criterion':['gini','entropy'],'max_depth':[4,5,6,7,8,9,10,11,12,15,20,30,40,50,70,90,120,150, 200, 250, 275]}
-    clf =  GridSearchCV(DecisionTreeClassifier(), param_grid)
+    clf =  GridSearchCV(DecisionTreeClassifier(), param_grid, cv = 5)
 
     clf.fit(xTreino, yTreino)
 
