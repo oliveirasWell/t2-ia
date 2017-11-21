@@ -55,7 +55,7 @@ def main():
     writer.writerow(['id','cuisine'])
     for key, value in result_dict.items():
        writer.writerow([key, value])
-
+    print(clf.best_params_)
     print('Result saved in file: SVM.csv')
 
 if __name__ == '__main__':

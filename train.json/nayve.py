@@ -56,6 +56,6 @@ def main():
        writer.writerow([key, value])
 
     print('Result saved in file: nayve.csv')
-
+    print(clf.best_params_)
 if __name__ == '__main__':
     main()
