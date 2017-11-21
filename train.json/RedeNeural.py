@@ -8,6 +8,7 @@ from sklearn.neural_network import MLPClassifier
 
 from sklearn.model_selection import GridSearchCV
 
+
 def leArquivoJson():
     with open('train.json') as data_file1:
         dataTreino = json.load(data_file1)
@@ -35,26 +36,15 @@ def main():
             if ingredient in exemplo:
                 xTreino[numeroPrato, numeroIngrediente] = True
 
-    #parameters={
-     #   'learning_rate': ["constant"],
-     #   'activation': ["logistic", "relu"],
-     #   #'solver': ['lbfgs', 'sgd', 'adam'],
-     #   'alpha': [0.0001, 0.001]
-    #}
-
     parameters = {
-    'learning_rate': ["constant", "invscaling", "adaptive"],
-    'hidden_layer_sizes': [(1,3)],
-    'alpha': [10.0],
-    'activation': ["logistic", "relu", "Tanh"]
+        'hidden_layer_sizes': [15, 10, 5],
+        'learning_rate': ["constant", "invscaling", "adaptive"],
+        'alpha': [0.0001],
+        'activation': ["logistic", "relu", "Tanh"]
     }
 
     clf = MLPClassifier()
-    gs = GridSearchCV(clf, param_grid=parameters, cv = 5)
-    #clf = GridSearchCV(estimator=MLPClassifier(), param_grid=parameters, n_jobs=-1, verbose=2, cv=10)
-
-    #clf = MLPClassifier(solver='lbfgs', alpha=1e-5,hidden_layer_sizes=(5, 2), random_state=1)
-
+    gs = GridSearchCV(clf, param_grid=parameters)
 
     gs.fit(xTreino, yTreino)
 
@@ -69,7 +59,9 @@ def main():
     result_test = gs.predict(xTeste)
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))
+
     print(gs.best_params_)
+
     writer = csv.writer(open('redeNeural.csv', 'wt'))
     writer.writerow(['id', 'cuisine'])
     for key, value in result_dict.items():
