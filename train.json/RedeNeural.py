@@ -37,14 +37,14 @@ def main():
                 xTreino[numeroPrato, numeroIngrediente] = True
 
     parameters = {
-        'hidden_layer_sizes': [15, 10, 5],
+        'hidden_layer_sizes': range(1, 20),
         'learning_rate': ["constant", "invscaling", "adaptive"],
         'alpha': [0.0001],
-        'activation': ["logistic", "relu", "Tanh"]
+        'activation': ["logistic", "relu", "tanh"]
     }
 
     clf = MLPClassifier()
-    gs = GridSearchCV(clf, param_grid=parameters)
+    gs = GridSearchCV(clf, param_grid=parameters, cv=5)
 
     gs.fit(xTreino, yTreino)
 
