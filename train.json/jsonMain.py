@@ -15,7 +15,6 @@ def leArquivoJson():
 
 
 def criarTodosOsIngrediente(dataTreino, dataTeste):
-
     # Acrescenta os ingredientes do conjunto de treino em ingredientes
     ingredientes = []
     for j in dataTreino:
@@ -34,12 +33,12 @@ def criarTodosOsIngrediente(dataTreino, dataTeste):
     todosOsIngredientesTeste = []
     for i in range(0, len(ingredientes)):
         for j in range(0, len(ingredientes[i])):
-             todosOsIngredientesTeste.append((ingredientes[i][j]))
+            todosOsIngredientesTeste.append((ingredientes[i][j]))
 
-    todosOsIngredientesTreino =  [x for x in set(todosOsIngredientesTreino)]
+    todosOsIngredientesTreino = [x for x in set(todosOsIngredientesTreino)]
     todosOsIngredientesTeste = [x for x in set(todosOsIngredientesTeste)]
-   # print(todosOsIngredientesTeste)
-    #print(todosOsIngredientesTreino)
+    # print(todosOsIngredientesTeste)
+    # print(todosOsIngredientesTreino)
 
 
 
@@ -59,8 +58,8 @@ def criarXSYIDS(dicionarioDeJson, todosOsIngredientes):
                 cont = cont + 1;
         quant.append(cont)
 
-    #quant, todosOsIngredientes = zip(*sorted(zip(quant, todosOsIngredientes)))
-    #print(quant)
+    # quant, todosOsIngredientes = zip(*sorted(zip(quant, todosOsIngredientes)))
+    # print(quant)
     # print(todosOsIngredientes)
     ingredientesMaioresQue100 = []
     quantIngredientesMaioresQue100 = []
@@ -100,12 +99,11 @@ def retornaTeste(todosOsIngredientesTreino, dicionarioDeJsonTEste, todosOsIngred
     return xsTeste, ids
 
 
-
 def main():
     dicionarioDeJsonTrieno, dicionarioDeJsonTEste = leArquivoJson()
 
     todosOsIngredientesTreino, todosOsIngredientesTeste = criarTodosOsIngrediente(dicionarioDeJsonTrieno, dicionarioDeJsonTEste)
-    #print(todosOsIngredientesTeste)
+    # print(todosOsIngredientesTeste)
 
     xsTreino, yTreino, idTreino, ingredientesMaioresQue100 = criarXSYIDS(dicionarioDeJsonTrieno, todosOsIngredientesTreino)
     xsTeste, idsTeste = retornaTeste(ingredientesMaioresQue100, dicionarioDeJsonTEste, todosOsIngredientesTeste)
@@ -123,29 +121,27 @@ def main():
     knn = neighbors.KNeighborsClassifier(15, weights='distance')
     weight_options = ['uniform', 'distance']
     param_grid = dict(n_neighbors=k_range, weights=weight_options)
-    #print(param_grid)
+    # print(param_grid)
     clf = GridSearchCV(knn, param_grid, cv=5, scoring='accuracy')
 
     clf.fit(xsTreino, yTreino)
 
-
-
     yTeste = clf.predict(xsTeste)
     print(clf.best_params_)
-    #print (len(yTeste))
- #   yTeste = clf.inverse_transform(yTeste)
+    # print (len(yTeste))
+    #   yTeste = clf.inverse_transform(yTeste)
 
     writer = csv.writer(open('submission.csv', 'wt'))
     writer.writerow(['id', 'cuisine'])
     print(len(idsTeste))
-    for i in range (0, len(idsTeste)):
+    for i in range(0, len(idsTeste)):
         writer.writerow([idsTeste[i], yTeste[i]])
 
     print('Result saved in file: submission.csv')
     print(clf.best_params_)
     # result_dict = dict(zip(id, maiorScore))
-    #print("Melhores resultados: Weight: uniform, k = 15, Score: %f" % (clf.score(xsTeste, yTeste)))
- #   return
+    # print("Melhores resultados: Weight: uniform, k = 15, Score: %f" % (clf.score(xsTeste, yTeste)))
+    #   return
 
 
 if __name__ == '__main__':
