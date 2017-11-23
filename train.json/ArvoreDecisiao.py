@@ -6,6 +6,8 @@ import json
 import numpy as np
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import GridSearchCV
+import time
+import timeit
 
 
 def leArquivoJson():
@@ -34,6 +36,7 @@ def main():
             if ingredient in exemplo:
                 xTreino[numeroPrato, numeroIngrediente] = True
 
+    inicio = timeit.default_timer()
     param_grid = {'criterion': ['gini', 'entropy'], 'max_depth': [4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 20, 30, 40, 50, 70, 90, 120, 150, 200, 250, 275]}
     clf = GridSearchCV(DecisionTreeClassifier(), param_grid, cv=5)
 
@@ -47,6 +50,8 @@ def main():
                 xTeste[numeroExemplo, numeroIngrediente] = True
 
     result_test = clf.predict(xTeste)
+    fim = (timeit.default_timer())
+    print('duracao: %f' % (fim - inicio))
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))
 

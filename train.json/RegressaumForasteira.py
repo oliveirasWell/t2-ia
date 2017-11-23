@@ -6,6 +6,8 @@ import json
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
+import time
+import timeit
 
 
 def leArquivoJson():
@@ -39,7 +41,7 @@ def main():
         for numeroIngrediente, ingredient in enumerate(ingredientesSemRepeticaoTreino):
             if ingredient in exemplo:
                 xTreino[numeroPrato, numeroIngrediente] = True
-
+    inicio = timeit.default_timer()
     clf = RandomForestClassifier(n_estimators=20)
     grid_search = GridSearchCV(clf, param_grid=param_grid, cv=5)
 
@@ -64,6 +66,8 @@ def main():
                 xTeste[numeroExemplo, numeroIngrediente] = True
 
     result_test = grid_search.predict(xTeste)
+    fim = (timeit.default_timer())
+    fim = (timeit.default_timer())
     print(grid_search.best_params_)
 
     ids = [item['id'] for item in dicionarioDeJsonTEste]
