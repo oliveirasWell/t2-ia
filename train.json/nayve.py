@@ -6,7 +6,8 @@ import json
 import numpy as np
 from sklearn.naive_bayes import BernoulliNB
 from sklearn.model_selection import GridSearchCV
-
+import time
+import timeit
 
 def leArquivoJson():
     with open('train.json') as data_file1:
@@ -37,6 +38,7 @@ def main():
     parameters = {'binarize': [0.0],
                   'fit_prior': [False, True],
                   'alpha': [0.0001, 1e-3, 1e-2, 0.1, 1]}
+    inicio = timeit.default_timer()
     clf = GridSearchCV(BernoulliNB(), parameters, n_jobs=-1, refit=True, cv=5)
     clf.fit(xTreino, yTreino)
 
@@ -48,6 +50,8 @@ def main():
                 xTeste[numeroExemplo, numeroIngrediente] = True
 
     result_test = clf.predict(xTeste)
+    fim = (timeit.default_timer())
+    print('duracao: %f' % (fim - inicio))
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))
 

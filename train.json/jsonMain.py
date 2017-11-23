@@ -2,7 +2,8 @@ import csv
 import json
 from sklearn import neighbors
 from sklearn.model_selection import GridSearchCV
-
+import time
+import timeit
 
 def leArquivoJson():
     with open('train.json') as data_file1:

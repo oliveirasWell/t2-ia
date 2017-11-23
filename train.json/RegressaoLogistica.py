@@ -6,6 +6,8 @@ import json
 import numpy as np
 from sklearn import linear_model
 from sklearn.model_selection import GridSearchCV
+import time
+import timeit
 
 
 def leArquivoJson():
@@ -38,7 +40,7 @@ def main():
         'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000],
         'solver': ['newton-cg', 'sag', 'saga', 'lbfgs']
     }
-
+    inicio = timeit.default_timer()
     clf = GridSearchCV(linear_model.LogisticRegression(penalty='l2'), param_grid, cv=5)
 
     clf.fit(xTreino, yTreino)
@@ -51,6 +53,11 @@ def main():
                 xTeste[numeroExemplo, numeroIngrediente] = True
 
     result_test = clf.predict(xTeste)
+    fim = (timeit.default_timer())
+    print('duracao: %f' % (fim - inicio))
+    fim = (timeit.default_timer())
+
+    print('duracao: %f' % (fim - inicio))
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))
 

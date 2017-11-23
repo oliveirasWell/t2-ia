@@ -5,7 +5,8 @@ import csv
 import json
 import numpy as np
 from sklearn.neural_network import MLPClassifier
-
+import time
+import timeit
 from sklearn.model_selection import GridSearchCV
 
 
@@ -42,7 +43,7 @@ def main():
         'alpha': [0.0001],
         'activation': ["logistic", "relu", "tanh"]
     }
-
+    inicio = timeit.default_timer()
     clf = MLPClassifier()
     gs = GridSearchCV(clf, param_grid=parameters, cv=5)
 
@@ -57,6 +58,8 @@ def main():
                 xTeste[numeroExemplo, numeroIngrediente] = True
 
     result_test = gs.predict(xTeste)
+    fim = (timeit.default_timer())
+    print('duracao: %f' % (fim - inicio))
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))
 

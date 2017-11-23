@@ -67,7 +67,7 @@ def main():
 
     result_test = grid_search.predict(xTeste)
     fim = (timeit.default_timer())
-    fim = (timeit.default_timer())
+    print('duracao: %f' % (fim - inicio))
     print(grid_search.best_params_)
 
     ids = [item['id'] for item in dicionarioDeJsonTEste]

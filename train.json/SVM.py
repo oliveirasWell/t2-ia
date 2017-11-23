@@ -6,6 +6,8 @@ import json
 import numpy as np
 from sklearn.model_selection import GridSearchCV
 from sklearn.svm import LinearSVC
+import time
+import timeit
 
 
 def leArquivoJson():
@@ -33,6 +35,7 @@ def main():
             if ingredient in exemplo:
                 xTreino[numeroPrato, numeroIngrediente] = True
 
+    inicio = timeit.default_timer()
     svc = LinearSVC(penalty='l2', dual=False, tol=1e-3)
     param_grid = {
         'C': [0.01, 0.1, 1.0, 10],
@@ -51,6 +54,8 @@ def main():
                 xTeste[numeroExemplo, numeroIngrediente] = True
 
     result_test = clf.predict(xTeste)
+    fim = (timeit.default_timer())
+    print('duracao: %f' % (fim - inicio))
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))
 
