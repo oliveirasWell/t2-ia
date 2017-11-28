@@ -26,7 +26,6 @@ def main():
     ingredientesSemRepeticaoTreino = set(item for sublist in ingredientesTreino for item in sublist)
 
     yTreino = [item['cuisine'] for item in dicionarioDeJsonTrieno]
-    # unique_cuisines = set(yTreino)
 
     xTreino = scipy.sparse.dok_matrix((len(ingredientesTreino), len(ingredientesSemRepeticaoTreino)), dtype=np.dtype(bool))
 
@@ -38,6 +37,7 @@ def main():
     parameters = {'binarize': [0.0],
                   'fit_prior': [False, True],
                   'alpha': [0.0001, 1e-3, 1e-2, 0.1, 1]}
+
     inicio = timeit.default_timer()
     clf = GridSearchCV(BernoulliNB(), parameters, n_jobs=-1, refit=True, cv=5)
     clf.fit(xTreino, yTreino)

@@ -6,7 +6,6 @@ import json
 import numpy as np
 from sklearn import linear_model
 from sklearn.model_selection import GridSearchCV
-import time
 import timeit
 
 
@@ -38,8 +37,10 @@ def main():
 
     param_grid = {
         'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000],
-        'solver': ['newton-cg', 'sag', 'saga', 'lbfgs']
+        'solver': ['newton-cg', 'sag', 'saga', 'lbfgs'],
+        'multi_class': ['ovr', 'multinomial']
     }
+
     inicio = timeit.default_timer()
     clf = GridSearchCV(linear_model.LogisticRegression(penalty='l2'), param_grid, cv=5)
 

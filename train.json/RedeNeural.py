@@ -38,11 +38,13 @@ def main():
                 xTreino[numeroPrato, numeroIngrediente] = True
 
     parameters = {
-        'hidden_layer_sizes': range(1, 20),
+        'hidden_layer_sizes': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 30, 35, 40],
         'learning_rate': ["constant", "invscaling", "adaptive"],
-        'alpha': [0.0001],
-        'activation': ["logistic", "relu", "tanh"]
+        'alpha': [1, 0.01, 0.001, 0.0001],
+        'activation': ["logistic", "identity", "tanh"],
+        'solver': ['adam', 'lbfgs', 'sgd'],
     }
+
     inicio = timeit.default_timer()
     clf = MLPClassifier()
     gs = GridSearchCV(clf, param_grid=parameters, cv=5)
