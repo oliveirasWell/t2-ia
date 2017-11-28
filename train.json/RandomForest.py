@@ -4,10 +4,11 @@ import scipy as scipy
 import csv
 import json
 import numpy as np
-from sklearn.naive_bayes import BernoulliNB
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 import time
 import timeit
+
 
 def leArquivoJson():
     with open('train.json') as data_file1:
@@ -26,21 +27,25 @@ def main():
     ingredientesSemRepeticaoTreino = set(item for sublist in ingredientesTreino for item in sublist)
 
     yTreino = [item['cuisine'] for item in dicionarioDeJsonTrieno]
-    # unique_cuisines = set(yTreino)
 
     xTreino = scipy.sparse.dok_matrix((len(ingredientesTreino), len(ingredientesSemRepeticaoTreino)), dtype=np.dtype(bool))
+
+    param_grid = {"max_depth": [3, None],
+                  "max_features": [1, 3, 10],
+                  "min_samples_split": [2, 3, 10],
+                  "min_samples_leaf": [1, 3, 10],
+                  "bootstrap": [True, False],
+                  "criterion": ["gini", "entropy"]}
 
     for numeroPrato, exemplo in enumerate(ingredientesTreino):
         for numeroIngrediente, ingredient in enumerate(ingredientesSemRepeticaoTreino):
             if ingredient in exemplo:
                 xTreino[numeroPrato, numeroIngrediente] = True
-
-    parameters = {'binarize': [0.0],
-                  'fit_prior': [False, True],
-                  'alpha': [0.0001, 1e-3, 1e-2, 0.1, 1]}
     inicio = timeit.default_timer()
-    clf = GridSearchCV(BernoulliNB(), parameters, n_jobs=-1, refit=True, cv=5)
-    clf.fit(xTreino, yTreino)
+    clf = RandomForestClassifier(n_estimators=20)
+    grid_search = GridSearchCV(clf, param_grid=param_grid, cv=5)
+
+    grid_search.fit(xTreino, yTreino)
 
     ingredientesTeste = [item['ingredients'] for item in dicionarioDeJsonTEste]
     xTeste = scipy.sparse.dok_matrix((len(ingredientesTeste), len(ingredientesSemRepeticaoTreino)), dtype=np.dtype(bool))
@@ -49,19 +54,20 @@ def main():
             if ingredient in dish:
                 xTeste[numeroExemplo, numeroIngrediente] = True
 
-    result_test = clf.predict(xTeste)
+    result_test = grid_search.predict(xTeste)
     fim = (timeit.default_timer())
     print('duracao: %f' % (fim - inicio))
+    print(grid_search.best_params_)
+
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))
 
-    writer = csv.writer(open('nayve.csv', 'wt'))
+    writer = csv.writer(open('RegressaoForasteira.csv', 'wt'))
     writer.writerow(['id', 'cuisine'])
     for key, value in result_dict.items():
         writer.writerow([key, value])
 
-    print('Result saved in file: nayve.csv')
-    print(clf.best_params_)
+    print('Result saved in file: RegressaoForasteira.csv')
 
 
 if __name__ == '__main__':

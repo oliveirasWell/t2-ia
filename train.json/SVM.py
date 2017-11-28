@@ -38,9 +38,11 @@ def main():
     inicio = timeit.default_timer()
     svc = LinearSVC(penalty='l2', dual=False, tol=1e-3)
     param_grid = {
-        'C': [0.01, 0.1, 1.0, 10],
+        'C': [0.001, 0.01, 0.1, 1.0, 10],
+        'tol': [1e-4, 1e-5],
         'dual': [True, False],
-        'fit_intercept': [True, False]
+        'fit_intercept': [True, False],
+        'multi_class': ['ovr', 'crammer_singer']
     }
     clf = GridSearchCV(estimator=svc, param_grid=param_grid, cv=5)
 
