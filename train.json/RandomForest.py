@@ -73,12 +73,12 @@ def main():
     ids = [item['id'] for item in dicionarioDeJsonTEste]
     result_dict = dict(zip(ids, result_test))
 
-    writer = csv.writer(open('RegressaoForasteira.csv', 'wt'))
+    writer = csv.writer(open('RandomForest.csv', 'wt'))
     writer.writerow(['id', 'cuisine'])
     for key, value in result_dict.items():
         writer.writerow([key, value])
 
-    print('Result saved in file: RegressaoForasteira.csv')
+    print('Result saved in file: RandomForest.csv')
 
 
 if __name__ == '__main__':
